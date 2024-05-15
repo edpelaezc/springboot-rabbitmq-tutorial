@@ -1,5 +1,6 @@
 package com.edpelaezc.springboot.springbootrabbitmqtutorial.publisher;
 
+import com.edpelaezc.springboot.springbootrabbitmqtutorial.dto.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -8,25 +9,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RabbitMQProducer {
+public class RabbitMQJSONProducer {
 
     @Value("${rabbitmq.exchange.name}")
     private String exchange;
 
-    @Value("${rabbitmq.routing.key}")
+    @Value("${rabbitmq.routing.key.json}")
     private String routingKey;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQProducer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQJSONProducer.class);
 
     private RabbitTemplate template;
 
     @Autowired
-    public RabbitMQProducer(RabbitTemplate template) {
+    public RabbitMQJSONProducer(RabbitTemplate template) {
         this.template = template;
     }
 
-    public void sendMessage(String message){
-        LOGGER.info(String.format("JSON message sent to RabbitMQ: %s", message));
-        template.convertAndSend(exchange, routingKey, message);
+    public void sendMessage(User user){
+        LOGGER.info(String.format("User sent to RabbitMQ: %s", user.toString()));
+        template.convertAndSend(exchange, routingKey, user);
     }
 }
